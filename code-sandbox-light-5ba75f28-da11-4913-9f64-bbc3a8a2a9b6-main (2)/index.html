@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PsicoEscuela - Sistema de Gestión Psicológica Estudiantil con IA" />
+  <title>PsicoEscuela — Sistema Psicológico Estudiantil</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     LOGIN PAGE
+════════════════════════════════════════════════════════════ -->
+<section id="login-page">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon"><i class="fas fa-brain"></i></div>
+      <h1>PsicoEscuela</h1>
+      <p>Sistema de Gestión Psicológica Estudiantil</p>
+    </div>
+
+    <div class="demo-hint">
+      <i class="fas fa-info-circle"></i>
+      <span id="demo-hint-text"><strong>Acceso administrador:</strong> daniel@psico.edu / daniel123</span>
+    </div>
+
+    <form id="login-form" novalidate>
+      <div class="form-group">
+        <label for="login-email">Correo electrónico</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-envelope field-icon"></i>
+          <input class="form-control" type="email" id="login-email"
+                 placeholder="tu@correo.edu" value="daniel@psico.edu" autocomplete="username" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="login-pass">Contraseña</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-lock field-icon"></i>
+          <input class="form-control" type="password" id="login-pass"
+                 placeholder="••••••••" value="daniel123" autocomplete="current-password" />
+        </div>
+      </div>
+      <div id="login-error" style="display:none;color:var(--danger);font-size:.82rem;margin-bottom:.75rem;"></div>
+      <button type="submit" class="btn btn-primary btn-full btn-lg" id="login-btn">
+        <i class="fas fa-sign-in-alt"></i> Ingresar al sistema
+      </button>
+    </form>
+
+    <div style="text-align:center;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
+      <a href="portal-padres.html" style="font-size:.8rem;color:var(--primary);text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;font-weight:600">
+        <i class="fas fa-child"></i> Soy padre/madre — Portal de Seguimiento
+      </a>
+    </div>
+
+    <p class="login-footer">
+      Sistema educativo &copy; 2026 · Sofía Mejía, Daniel Bermúdez, Erika Muñoz
+    </p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     APLICACIÓN PRINCIPAL
+════════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- Overlay móvil -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="s-logo"><i class="fas fa-brain"></i></div>
+      <div>
+        <h2>PsicoEscuela</h2>
+        <span>Gestión Psicológica</span>
+      </div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="user-avatar" id="nav-user-avatar">SM</div>
+      <div class="user-info">
+        <div class="u-name" id="nav-user-name">Dra. Sofía Mejía</div>
+        <div class="u-role" id="nav-user-role">Psicóloga Clínica</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Principal</div>
+      <div class="nav-item active" data-page="dashboard">
+        <i class="fas fa-chart-pie nav-icon"></i> Dashboard
+      </div>
+
+      <div class="nav-section-label">Gestión</div>
+      <div class="nav-item" data-page="estudiantes">
+        <i class="fas fa-user-graduate nav-icon"></i> Estudiantes
+      </div>
+      <div class="nav-item" data-page="casos">
+        <i class="fas fa-folder-open nav-icon"></i> Casos
+      </div>
+      <div class="nav-item" data-page="diagnosticos">
+        <i class="fas fa-stethoscope nav-icon"></i> Diagnósticos
+      </div>
+      <div class="nav-item" data-page="observaciones">
+        <i class="fas fa-clipboard-list nav-icon"></i> Observaciones
+      </div>
+
+      <div class="nav-section-label">Seguimiento</div>
+      <div class="nav-item" data-page="citas">
+        <i class="fas fa-calendar-alt nav-icon"></i> Citas
+      </div>
+      <div class="nav-item" data-page="alertas">
+        <i class="fas fa-bell nav-icon"></i> Alertas
+        <span class="nav-badge" id="alertas-badge">2</span>
+      </div>
+      <div class="nav-item" data-page="acudientes">
+        <i class="fas fa-users nav-icon"></i> Acudientes
+      </div>
+
+      <div class="nav-section-label">Administración</div>
+      <div class="nav-item" id="nav-psicologos" data-page="psicologos" style="display:none">
+        <i class="fas fa-user-md nav-icon"></i> Psicólogos
+      </div>
+
+      <div class="nav-section-label">IA & Análisis</div>
+      <div class="nav-item" data-page="reportes">
+        <i class="fas fa-robot nav-icon"></i> IA · Reportes
+      </div>
+      <div class="nav-item" data-page="estadisticas">
+        <i class="fas fa-chart-bar nav-icon"></i> Estadísticas
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="nav-item" id="logout-btn">
+        <i class="fas fa-sign-out-alt nav-icon"></i> Cerrar sesión
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── TOPBAR ───────────────────────────────────────────── -->
+  <header class="topbar">
+    <button class="topbar-menu-btn" id="menu-btn" aria-label="Menú">
+      <i class="fas fa-bars"></i>
+    </button>
+    <span class="topbar-title" id="topbar-title">Dashboard</span>
+    <div class="topbar-actions">
+      <button class="topbar-btn" id="notif-btn" title="Alertas">
+        <i class="fas fa-bell"></i>
+        <span class="topbar-notif-dot" id="notif-dot"></span>
+      </button>
+      <div class="topbar-avatar" id="topbar-avatar" title="Mi perfil">SM</div>
+    </div>
+  </header>
+
+  <!-- ── CONTENIDO PRINCIPAL ─────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- ══ DASHBOARD ══════════════════════════════════════ -->
+    <section id="page-dashboard" class="page-section active">
+      <div class="stats-grid" id="stats-grid">
+        <!-- Se llena desde JS -->
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Alertas recientes -->
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-bell" style="color:var(--danger)"></i>
+            <h3>Alertas activas</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-ghost" onclick="goToPage('alertas')">Ver todas</button>
+            </div>
+          </div>
+          <div class="card-body" id="dash-alertas"></div>
+        </div>
+
+        <!-- Próximas citas -->
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-calendar-check" style="color:var(--primary)"></i>
+            <h3>Próximas citas</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-ghost" onclick="goToPage('citas')">Ver todas</button>
+            </div>
+          </div>
+          <div class="card-body" id="dash-citas"></div>
+        </div>
+
+        <!-- Casos recientes -->
+        <div class="card col-full">
+          <div class="card-header">
+            <i class="fas fa-folder-open" style="color:var(--warning)"></i>
+            <h3>Casos recientes</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-primary" onclick="goToPage('casos')">
+                <i class="fas fa-plus"></i> Nuevo caso
+              </button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Estudiante</th>
+                  <th>Caso</th>
+                  <th>Categoría</th>
+                  <th>Prioridad</th>
+                  <th>Estado</th>
+                  <th>Fecha</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="dash-casos-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Gráfica distribución -->
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-chart-donut" style="color:var(--secondary)"></i>
+            <h3>Casos por categoría</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height:260px">
+              <canvas id="chart-cat"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfica prioridades -->
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-chart-bar" style="color:var(--warning)"></i>
+            <h3>Casos por prioridad</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height:260px">
+              <canvas id="chart-prio"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ ESTUDIANTES ════════════════════════════════════ -->
+    <section id="page-estudiantes" class="page-section">
+      <div class="page-toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="est-search" placeholder="Buscar estudiante por nombre, grado..." />
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-est')">
+          <i class="fas fa-plus"></i> Nuevo estudiante
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Estudiante</th>
+                <th>Grado</th>
+                <th>Edad</th>
+                <th>Género</th>
+                <th>Estado</th>
+                <th>Casos</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="est-tbody"></tbody>
+          </table>
+        </div>
+        <div id="est-empty" class="empty-state" style="display:none">
+          <div class="empty-icon"><i class="fas fa-user-graduate"></i></div>
+          <h4>No hay estudiantes registrados</h4>
+          <p>Haz clic en "Nuevo estudiante" para agregar el primero.</p>
+        </div>
+      </div>
+
+      <!-- Paginación -->
+      <div id="est-pagination" style="display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;"></div>
+    </section>
+
+    <!-- ══ CASOS ══════════════════════════════════════════ -->
+    <section id="page-casos" class="page-section">
+      <div class="page-toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="cas-search" placeholder="Buscar casos..." />
+        </div>
+        <select class="form-control" id="cas-filter-estado" style="width:auto;min-width:150px">
+          <option value="">Todos los estados</option>
+          <option value="abierto">Abierto</option>
+          <option value="en_proceso">En proceso</option>
+          <option value="cerrado">Cerrado</option>
+        </select>
+        <select class="form-control" id="cas-filter-prio" style="width:auto;min-width:150px">
+          <option value="">Toda prioridad</option>
+          <option value="critica">Crítica</option>
+          <option value="alta">Alta</option>
+          <option value="media">Media</option>
+          <option value="baja">Baja</option>
+        </select>
+        <button class="btn btn-primary" onclick="openModal('modal-caso')">
+          <i class="fas fa-plus"></i> Nuevo caso
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Estudiante</th>
+                <th>Título del caso</th>
+                <th>Categoría</th>
+                <th>Prioridad</th>
+                <th>Estado</th>
+                <th>Psicólogo</th>
+                <th>Fecha inicio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="cas-tbody"></tbody>
+          </table>
+        </div>
+        <div id="cas-empty" class="empty-state" style="display:none">
+          <div class="empty-icon"><i class="fas fa-folder-open"></i></div>
+          <h4>No hay casos registrados</h4>
+          <p>Crea el primer caso psicológico.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ DIAGNÓSTICOS ═══════════════════════════════════ -->
+    <section id="page-diagnosticos" class="page-section">
+      <div class="page-toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="diag-search" placeholder="Buscar diagnósticos..." />
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-diag')">
+          <i class="fas fa-plus"></i> Nuevo diagnóstico
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Estudiante</th>
+                <th>Diagnóstico</th>
+                <th>CIE-10</th>
+                <th>Psicólogo</th>
+                <th>Fecha</th>
+                <th>IA</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="diag-tbody"></tbody>
+          </table>
+        </div>
+        <div id="diag-empty" class="empty-state" style="display:none">
+          <div class="empty-icon"><i class="fas fa-stethoscope"></i></div>
+          <h4>No hay diagnósticos registrados</h4>
+          <p>Crea el primer diagnóstico desde un caso activo.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ OBSERVACIONES ══════════════════════════════════ -->
+    <section id="page-observaciones" class="page-section">
+      <div class="page-toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="obs-search" placeholder="Buscar observaciones..." />
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-obs')">
+          <i class="fas fa-plus"></i> Nueva observación
+        </button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Estudiante</th>
+                <th>Caso</th>
+                <th>Observación</th>
+                <th>Tipo</th>
+                <th>Psicólogo</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="obs-tbody"></tbody>
+          </table>
+        </div>
+        <div id="obs-empty" class="empty-state" style="display:none">
+          <div class="empty-icon"><i class="fas fa-clipboard-list"></i></div>
+          <h4>No hay observaciones registradas</h4>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CITAS ══════════════════════════════════════════ -->
+    <section id="page-citas" class="page-section">
+      <div class="page-toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="cit-search" placeholder="Buscar citas..." />
+        </div>
+        <select class="form-control" id="cit-filter-estado" style="width:auto;min-width:150px">
+          <option value="">Todas las citas</option>
+          <option value="programada">Programadas</option>
+          <option value="completada">Completadas</option>
+          <option value="cancelada">Canceladas</option>
+        </select>
+        <button class="btn btn-primary" onclick="openModal('modal-cita')">
+          <i class="fas fa-plus"></i> Agendar cita
+        </button>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="card col-full">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Estudiante</th>
+                  <th>Fecha y hora</th>
+                  <th>Tipo</th>
+                  <th>Duración</th>
+                  <th>Estado</th>
+                  <th>Psicólogo</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="cit-tbody"></tbody>
+            </table>
+          </div>
+          <div id="cit-empty" class="empty-state" style="display:none">
+            <div class="empty-icon"><i class="fas fa-calendar-alt"></i></div>
+            <h4>No hay citas programadas</h4>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ ALERTAS ════════════════════════════════════════ -->
+    <section id="page-alertas" class="page-section">
+      <div class="page-toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="alt-search" placeholder="Buscar alertas..." />
+        </div>
+        <select class="form-control" id="alt-filter-nivel" style="width:auto;min-width:150px">
+          <option value="">Todos los niveles</option>
+          <option value="critico">Crítico</option>
+          <option value="advertencia">Advertencia</option>
+          <option value="info">Informativo</option>
+        </select>
+        <button class="btn btn-primary" onclick="openModal('modal-alerta')">
+          <i class="fas fa-plus"></i> Nueva alerta
+        </button>
+        <button class="btn btn-secondary" onclick="marcarTodasLeidas()">
+          <i class="fas fa-check-double"></i> Marcar leídas
+        </button>
+      </div>
+
+      <div id="alertas-list"></div>
+    </section>
+
+    <!-- ══ ACUDIENTES ══════════════════════════════════════ -->
+    <section id="page-acudientes" class="page-section">
+      <div class="page-toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="acu-search" placeholder="Buscar acudientes..." />
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-acu')">
+          <i class="fas fa-plus"></i> Nuevo acudiente
+        </button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Acudiente</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Parentesco</th>
+                <th>Estudiante</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="acu-tbody"></tbody>
+          </table>
+        </div>
+        <div id="acu-empty" class="empty-state" style="display:none">
+          <div class="empty-icon"><i class="fas fa-users"></i></div>
+          <h4>No hay acudientes registrados</h4>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ REPORTES / IA ══════════════════════════════════ -->
+    <section id="page-reportes" class="page-section">
+      <div class="dashboard-grid">
+        <!-- Panel IA -->
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-robot" style="color:var(--primary)"></i>
+            <h3>Asistente IA Psicológico</h3>
+            <span class="ia-badge">IA</span>
+          </div>
+          <div class="card-body">
+            <p style="font-size:.875rem;color:var(--text-muted);margin-bottom:1rem">
+              Pregúntame sobre los estudiantes, casos, patrones de conducta o pide un análisis general del sistema.
+            </p>
+            <div class="form-group">
+              <label>¿Qué quieres analizar?</label>
+              <select class="form-control" id="ia-contexto">
+                <option value="general">Análisis general del sistema</option>
+                <option value="alertas">Análisis de alertas activas</option>
+                <option value="casos">Resumen de casos abiertos</option>
+                <option value="riesgo">Estudiantes en riesgo</option>
+                <option value="citas">Recomendaciones de seguimiento</option>
+                <option value="personalizado">Consulta personalizada</option>
+              </select>
+            </div>
+            <div class="form-group" id="ia-custom-group" style="display:none">
+              <label>Tu consulta</label>
+              <textarea class="form-control" id="ia-custom-input"
+                        placeholder="Escribe tu pregunta o consulta para la IA..."></textarea>
+            </div>
+            <button class="btn btn-primary btn-full" id="ia-btn" onclick="generarIAAnalysis()">
+              <i class="fas fa-magic"></i> Generar análisis con IA
+            </button>
+
+            <div class="ia-panel" id="ia-result" style="display:none">
+              <div class="ia-panel-header">
+                <i class="fas fa-robot" style="color:var(--primary)"></i>
+                <h4>Respuesta del Asistente IA</h4>
+                <span class="ia-badge">IA</span>
+              </div>
+              <div id="ia-typing-anim" class="ia-typing" style="display:none">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="ia-response" id="ia-response-text"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Historial reportes -->
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-file-alt" style="color:var(--success)"></i>
+            <h3>Reportes generados</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-success" onclick="generarReporteGeneral()">
+                <i class="fas fa-file-export"></i> Generar reporte
+              </button>
+            </div>
+          </div>
+          <div class="card-body" id="reportes-list">
+            <div class="empty-state">
+              <div class="empty-icon"><i class="fas fa-file-alt"></i></div>
+              <h4>No hay reportes generados</h4>
+              <p>Usa el Asistente IA para generar el primero.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PSICÓLOGOS (solo super admin) ════════════════ -->
+    <section id="page-psicologos" class="page-section">
+      <div class="page-toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="psi-search" placeholder="Buscar psicólogos..." />
+        </div>
+        <button class="btn btn-primary" onclick="limpiarFormPsicologo();openModal('modal-psicologo')">
+          <i class="fas fa-plus"></i> Nuevo psicólogo
+        </button>
+      </div>
+
+      <div class="card" style="margin-bottom:1rem;border-left:4px solid var(--primary)">
+        <div class="card-body" style="padding:.85rem 1.25rem;font-size:.85rem;color:var(--primary-dark);background:var(--primary-light);border-radius:var(--radius)">
+          <i class="fas fa-shield-alt"></i>
+          <strong>Zona de super administrador.</strong> Solo <strong>Dr. Daniel Bermúdez</strong> puede crear, editar o eliminar psicólogos.
+          Los psicólogos registrados aquí podrán iniciar sesión con su correo y contraseña.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Psicólogo</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="psi-tbody"></tbody>
+          </table>
+        </div>
+        <div id="psi-empty" class="empty-state" style="display:none">
+          <div class="empty-icon"><i class="fas fa-user-md"></i></div>
+          <h4>No hay psicólogos adicionales</h4>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ ESTADÍSTICAS ═══════════════════════════════════ -->
+    <section id="page-estadisticas" class="page-section">
+      <div class="dashboard-grid">
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-chart-line" style="color:var(--primary)"></i>
+            <h3>Citas por mes</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height:280px">
+              <canvas id="chart-citas-mes"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <i class="fas fa-chart-bar" style="color:var(--warning)"></i>
+            <h3>Casos por estado</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height:280px">
+              <canvas id="chart-casos-estado"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="card col-full">
+          <div class="card-header">
+            <i class="fas fa-chart-area" style="color:var(--success)"></i>
+            <h3>Alertas por tipo</h3>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height:280px">
+              <canvas id="chart-alertas-tipo"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /main-content -->
+</div><!-- /app -->
+
+<!-- ════════════════════════════════════════════════════════════
+     MODALES
+════════════════════════════════════════════════════════════ -->
+
+<!-- Modal: Nuevo/Editar Estudiante -->
+<div class="modal-backdrop" id="modal-est">
+  <div class="modal">
+    <div class="modal-header">
+      <i class="fas fa-user-graduate" style="color:var(--primary)"></i>
+      <h3 id="modal-est-title">Nuevo Estudiante</h3>
+      <button class="modal-close" onclick="closeModal('modal-est')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="est-id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre completo *</label>
+          <input class="form-control" id="est-nombre" placeholder="Nombre y apellidos" required />
+        </div>
+        <div class="form-group">
+          <label>Grado *</label>
+          <input class="form-control" id="est-grado" placeholder="Ej: 8°A" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Edad *</label>
+          <input class="form-control" type="number" id="est-edad" min="5" max="25" />
+        </div>
+        <div class="form-group">
+          <label>Género</label>
+          <select class="form-control" id="est-genero">
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="No binario">No binario</option>
+            <option value="Prefiero no decir">Prefiero no decir</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Estado</label>
+          <select class="form-control" id="est-estado">
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-est')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarEstudiante()">
+        <i class="fas fa-save"></i> Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Nuevo/Editar Caso -->
+<div class="modal-backdrop" id="modal-caso">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <i class="fas fa-folder-open" style="color:var(--warning)"></i>
+      <h3 id="modal-caso-title">Nuevo Caso Psicológico</h3>
+      <button class="modal-close" onclick="closeModal('modal-caso')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="caso-id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>Estudiante *</label>
+          <select class="form-control" id="caso-estudiante"></select>
+        </div>
+        <div class="form-group">
+          <label>Psicólogo *</label>
+          <select class="form-control" id="caso-psicologo"></select>
+        </div>
+      </div>
+      <div class="form-group form-row cols-1">
+        <label>Título del caso *</label>
+        <input class="form-control" id="caso-titulo" placeholder="Descripción breve del caso" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoría</label>
+          <select class="form-control" id="caso-categoria">
+            <option value="Ansiedad">Ansiedad</option>
+            <option value="Conducta">Conducta / Agresividad</option>
+            <option value="Estado de ánimo">Estado de ánimo / Depresión</option>
+            <option value="Orientación Vocacional">Orientación Vocacional</option>
+            <option value="Acoso escolar">Acoso escolar (Bullying)</option>
+            <option value="Familia">Problemas familiares</option>
+            <option value="Aprendizaje">Dificultades de aprendizaje</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Prioridad</label>
+          <select class="form-control" id="caso-prioridad">
+            <option value="baja">Baja</option>
+            <option value="media">Media</option>
+            <option value="alta">Alta</option>
+            <option value="critica">Crítica</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Estado</label>
+          <select class="form-control" id="caso-estado">
+            <option value="abierto">Abierto</option>
+            <option value="en_proceso">En proceso</option>
+            <option value="cerrado">Cerrado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha de inicio</label>
+          <input class="form-control" type="date" id="caso-fecha" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Descripción detallada</label>
+        <textarea class="form-control" id="caso-desc" rows="4"
+                  placeholder="Describe el caso con todos los detalles relevantes..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-caso')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarCaso()">
+        <i class="fas fa-save"></i> Guardar caso
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Nuevo Diagnóstico -->
+<div class="modal-backdrop" id="modal-diag">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <i class="fas fa-stethoscope" style="color:var(--info)"></i>
+      <h3 id="modal-diag-title">Nuevo Diagnóstico</h3>
+      <button class="modal-close" onclick="closeModal('modal-diag')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="diag-id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>Estudiante *</label>
+          <select class="form-control" id="diag-estudiante"></select>
+        </div>
+        <div class="form-group">
+          <label>Caso relacionado</label>
+          <select class="form-control" id="diag-caso"><option value="">Sin caso</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Código CIE-10</label>
+          <input class="form-control" id="diag-cie10" placeholder="Ej: F41.1 - Ansiedad generalizada" />
+        </div>
+        <div class="form-group">
+          <label>Fecha *</label>
+          <input class="form-control" type="date" id="diag-fecha" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Descripción del diagnóstico *</label>
+        <textarea class="form-control" id="diag-desc" rows="4"
+                  placeholder="Describe el diagnóstico clínico detalladamente..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Recomendaciones</label>
+        <textarea class="form-control" id="diag-reco" rows="3"
+                  placeholder="Recomendaciones de tratamiento y seguimiento..."></textarea>
+      </div>
+      <div class="ia-panel">
+        <div class="ia-panel-header">
+          <i class="fas fa-robot" style="color:var(--primary)"></i>
+          <h4>Sugerencia de IA</h4>
+          <span class="ia-badge">IA</span>
+        </div>
+        <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:.75rem">
+          La IA analizará el diagnóstico y generará sugerencias de intervención.
+        </p>
+        <button class="btn btn-ghost btn-sm" onclick="generarSugerenciaIA('diag')">
+          <i class="fas fa-magic"></i> Generar sugerencia IA
+        </button>
+        <div id="diag-ia-result" style="display:none;margin-top:.75rem" class="ia-response"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-diag')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarDiagnostico()">
+        <i class="fas fa-save"></i> Guardar diagnóstico
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Nueva Cita -->
+<div class="modal-backdrop" id="modal-cita">
+  <div class="modal">
+    <div class="modal-header">
+      <i class="fas fa-calendar-plus" style="color:var(--primary)"></i>
+      <h3>Agendar Cita</h3>
+      <button class="modal-close" onclick="closeModal('modal-cita')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="cita-id" />
+
+      <!-- Aviso visible solo cuando la cita está completada -->
+      <div id="cita-completada-info" style="display:none;align-items:center;gap:.65rem;
+           background:#fefce8;border:1.5px solid #fcd34d;border-radius:.5rem;
+           padding:.75rem 1rem;margin-bottom:1rem;font-size:.82rem;color:#92400e">
+        <i class="fas fa-lock" style="font-size:1rem"></i>
+        <span><strong>Cita completada.</strong> Solo puedes modificar el estado y las notas de sesión. Los demás campos están bloqueados.</span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Estudiante *</label>
+          <select class="form-control" id="cita-estudiante"></select>
+        </div>
+        <div class="form-group">
+          <label>Psicólogo *</label>
+          <select class="form-control" id="cita-psicologo"></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fecha y hora *</label>
+          <input class="form-control" type="datetime-local" id="cita-fecha" />
+        </div>
+        <div class="form-group">
+          <label>Duración (minutos)</label>
+          <select class="form-control" id="cita-duracion">
+            <option value="30">30 min</option>
+            <option value="45" selected>45 min</option>
+            <option value="60">60 min</option>
+            <option value="90">90 min</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipo</label>
+          <select class="form-control" id="cita-tipo">
+            <option value="presencial">Presencial</option>
+            <option value="virtual">Virtual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select class="form-control" id="cita-estado">
+            <option value="programada">Programada</option>
+            <option value="completada">Completada</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Notas de sesión</label>
+        <textarea class="form-control" id="cita-notas" rows="3"
+                  placeholder="Notas o resumen de la sesión..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-cita')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarCita()">
+        <i class="fas fa-save"></i> Guardar cita
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Nueva Alerta -->
+<div class="modal-backdrop" id="modal-alerta">
+  <div class="modal">
+    <div class="modal-header">
+      <i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i>
+      <h3>Nueva Alerta</h3>
+      <button class="modal-close" onclick="closeModal('modal-alerta')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="alerta-id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>Estudiante *</label>
+          <select class="form-control" id="alerta-estudiante"></select>
+        </div>
+        <div class="form-group">
+          <label>Nivel de alerta *</label>
+          <select class="form-control" id="alerta-nivel">
+            <option value="info">Informativo</option>
+            <option value="advertencia">Advertencia</option>
+            <option value="critico">Crítico</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipo</label>
+          <select class="form-control" id="alerta-tipo">
+            <option value="riesgo_alto">Riesgo alto</option>
+            <option value="ausentismo">Ausentismo</option>
+            <option value="cambio_conducta">Cambio de conducta</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha</label>
+          <input class="form-control" type="date" id="alerta-fecha" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Descripción *</label>
+        <textarea class="form-control" id="alerta-desc" rows="4"
+                  placeholder="Describe detalladamente la situación de alerta..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-alerta')">Cancelar</button>
+      <button class="btn btn-danger" onclick="guardarAlerta()">
+        <i class="fas fa-bell"></i> Crear alerta
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Nuevo Acudiente -->
+<div class="modal-backdrop" id="modal-acu">
+  <div class="modal">
+    <div class="modal-header">
+      <i class="fas fa-user-friends" style="color:var(--secondary)"></i>
+      <h3>Nuevo Acudiente</h3>
+      <button class="modal-close" onclick="closeModal('modal-acu')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="acu-id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre completo *</label>
+          <input class="form-control" id="acu-nombre" placeholder="Nombre del acudiente" />
+        </div>
+        <div class="form-group">
+          <label>Teléfono *</label>
+          <input class="form-control" id="acu-tel" placeholder="300-000-0000" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email</label>
+          <input class="form-control" type="email" id="acu-email" placeholder="correo@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Parentesco</label>
+          <select class="form-control" id="acu-parentesco">
+            <option value="Madre">Madre</option>
+            <option value="Padre">Padre</option>
+            <option value="Abuelo/a">Abuelo/a</option>
+            <option value="Tío/a">Tío/a</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Estudiante asociado *</label>
+        <select class="form-control" id="acu-estudiante"></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-acu')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarAcudiente()">
+        <i class="fas fa-save"></i> Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Nuevo/Editar Psicólogo (solo super admin) -->
+<div class="modal-backdrop" id="modal-psicologo">
+  <div class="modal">
+    <div class="modal-header">
+      <i class="fas fa-user-md" style="color:var(--primary)"></i>
+      <h3 id="modal-psicologo-title">Nuevo Psicólogo</h3>
+      <button class="modal-close" onclick="closeModal('modal-psicologo')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="psi-id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre completo *</label>
+          <input class="form-control" id="psi-nombre" placeholder="Dr. / Dra. Nombre Apellido" />
+        </div>
+        <div class="form-group">
+          <label>Especialidad</label>
+          <input class="form-control" id="psi-especialidad" placeholder="Ej: Psicología Educativa" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Correo electrónico *</label>
+        <input class="form-control" type="email" id="psi-email" placeholder="correo@institucion.edu" />
+      </div>
+      <div class="form-group">
+        <label id="psi-pass-label">Contraseña *</label>
+        <input class="form-control" type="password" id="psi-pass" placeholder="Mínimo 6 caracteres" />
+      </div>
+      <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:.5rem;padding:.75rem 1rem;font-size:.8rem;color:#92400e;margin-top:.5rem">
+        <i class="fas fa-info-circle"></i>
+        El psicólogo podrá iniciar sesión con este correo y contraseña. El rol asignado será
+        <strong>Psicólogo</strong> — no tendrá acceso a esta sección de administración.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-psicologo')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarPsicologo()">
+        <i class="fas fa-save"></i> Guardar psicólogo
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Nueva Observación -->
+<div class="modal-backdrop" id="modal-obs">
+  <div class="modal">
+    <div class="modal-header">
+      <i class="fas fa-clipboard-list" style="color:var(--success)"></i>
+      <h3>Nueva Observación</h3>
+      <button class="modal-close" onclick="closeModal('modal-obs')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="obs-id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>Caso *</label>
+          <select class="form-control" id="obs-caso"></select>
+        </div>
+        <div class="form-group">
+          <label>Tipo</label>
+          <select class="form-control" id="obs-tipo">
+            <option value="sesión">Sesión</option>
+            <option value="seguimiento">Seguimiento</option>
+            <option value="incidente">Incidente</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Fecha *</label>
+        <input class="form-control" type="date" id="obs-fecha" />
+      </div>
+      <div class="form-group">
+        <label>Contenido de la observación *</label>
+        <textarea class="form-control" id="obs-contenido" rows="5"
+                  placeholder="Detalla lo observado durante la sesión o seguimiento..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-obs')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarObservacion()">
+        <i class="fas fa-save"></i> Guardar observación
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Ver detalle estudiante -->
+<div class="modal-backdrop" id="modal-est-detalle">
+  <div class="modal modal-xl">
+    <div class="modal-header">
+      <i class="fas fa-user-circle" style="color:var(--primary)"></i>
+      <h3 id="detalle-est-title">Perfil del Estudiante</h3>
+      <button class="modal-close" onclick="closeModal('modal-est-detalle')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="modal-est-detalle-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-est-detalle')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- JS Principal -->
+<script src="js/app.js"></script>
+</body>
+</html>
