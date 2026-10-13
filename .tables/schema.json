@@ -1,0 +1,397 @@
+[
+  {
+    "name": "estudiantes",
+    "fields": [
+      {
+        "name": "id",
+        "type": "text",
+        "description": "ID único del estudiante"
+      },
+      {
+        "name": "nombre",
+        "type": "text",
+        "description": "Nombre completo del estudiante"
+      },
+      {
+        "name": "grado",
+        "type": "text",
+        "description": "Grado escolar del estudiante"
+      },
+      {
+        "name": "edad",
+        "type": "number",
+        "description": "Edad del estudiante"
+      },
+      {
+        "name": "genero",
+        "type": "text",
+        "description": "Género del estudiante"
+      },
+      {
+        "name": "id_acudiente",
+        "type": "text",
+        "description": "ID del acudiente"
+      },
+      {
+        "name": "estado",
+        "type": "text",
+        "description": "Estado del estudiante: activo, inactivo"
+      },
+      {
+        "name": "foto",
+        "type": "text",
+        "description": "URL o base64 de la foto del estudiante"
+      }
+    ]
+  },
+  {
+    "name": "psicologos",
+    "fields": [
+      {
+        "name": "id",
+        "type": "text",
+        "description": "ID único del psicólogo"
+      },
+      {
+        "name": "nombre",
+        "type": "text",
+        "description": "Nombre completo del psicólogo"
+      },
+      {
+        "name": "email",
+        "type": "text",
+        "description": "Correo electrónico"
+      },
+      {
+        "name": "password_hash",
+        "type": "text",
+        "description": "Contraseña hasheada"
+      },
+      {
+        "name": "especialidad",
+        "type": "text",
+        "description": "Especialidad del psicólogo"
+      },
+      {
+        "name": "rol",
+        "type": "text",
+        "description": "Rol: admin, psicologo"
+      }
+    ]
+  },
+  {
+    "name": "acudientes",
+    "fields": [
+      {
+        "name": "id",
+        "type": "text",
+        "description": "ID único del acudiente"
+      },
+      {
+        "name": "nombre",
+        "type": "text",
+        "description": "Nombre completo del acudiente"
+      },
+      {
+        "name": "telefono",
+        "type": "text",
+        "description": "Teléfono de contacto"
+      },
+      {
+        "name": "email",
+        "type": "text",
+        "description": "Correo electrónico"
+      },
+      {
+        "name": "parentesco",
+        "type": "text",
+        "description": "Relación con el estudiante"
+      },
+      {
+        "name": "id_estudiante",
+        "type": "text",
+        "description": "ID del estudiante asociado"
+      }
+    ]
+  },
+  {
+    "name": "casos",
+    "fields": [
+      {
+        "name": "id",
+        "type": "text",
+        "description": "ID único del caso"
+      },
+      {
+        "name": "id_estudiante",
+        "type": "text",
+        "description": "ID del estudiante"
+      },
+      {
+        "name": "id_psicologo",
+        "type": "text",
+        "description": "ID del psicólogo"
+      },
+      {
+        "name": "titulo",
+        "type": "text",
+        "description": "Título del caso"
+      },
+      {
+        "name": "descripcion",
+        "type": "rich_text",
+        "description": "Descripción detallada del caso"
+      },
+      {
+        "name": "fecha_inicio",
+        "type": "datetime",
+        "description": "Fecha de inicio del caso"
+      },
+      {
+        "name": "estado",
+        "type": "text",
+        "description": "Estado: abierto, en_proceso, cerrado"
+      },
+      {
+        "name": "prioridad",
+        "type": "text",
+        "description": "Prioridad: baja, media, alta, critica"
+      },
+      {
+        "name": "categoria",
+        "type": "text",
+        "description": "Categoría del caso"
+      }
+    ]
+  },
+  {
+    "name": "diagnosticos",
+    "fields": [
+      {
+        "name": "id",
+        "type": "text",
+        "description": "ID único del diagnóstico"
+      },
+      {
+        "name": "id_caso",
+        "type": "text",
+        "description": "ID del caso asociado"
+      },
+      {
+        "name": "id_estudiante",
+        "type": "text",
+        "description": "ID del estudiante"
+      },
+      {
+        "name": "id_psicologo",
+        "type": "text",
+        "description": "ID del psicólogo"
+      },
+      {
+        "name": "descripcion",
+        "type": "rich_text",
+        "description": "Descripción del diagnóstico"
+      },
+      {
+        "name": "categoria_cie10",
+        "type": "text",
+        "description": "Código CIE-10"
+      },
+      {
+        "name": "fecha",
+        "type": "datetime",
+        "description": "Fecha del diagnóstico"
+      },
+      {
+        "name": "recomendaciones",
+        "type": "rich_text",
+        "description": "Recomendaciones del psicólogo"
+      },
+      {
+        "name": "ia_sugerencia",
+        "type": "rich_text",
+        "description": "Sugerencia generada por IA"
+      }
+    ]
+  },
+  {
+    "name": "citas",
+    "fields": [
+      {
+        "name": "id",
+        "type": "text",
+        "description": "ID único de la cita"
+      },
+      {
+        "name": "id_estudiante",
+        "type": "text",
+        "description": "ID del estudiante"
+      },
+      {
+        "name": "id_psicologo",
+        "type": "text",
+        "description": "ID del psicólogo"
+      },
+      {
+        "name": "id_caso",
+        "type": "text",
+        "description": "ID del caso asociado (opcional)"
+      },
+      {
+        "name": "fecha_hora",
+        "type": "datetime",
+        "description": "Fecha y hora de la cita"
+      },
+      {
+        "name": "duracion_min",
+        "type": "number",
+        "description": "Duración en minutos"
+      },
+      {
+        "name": "estado",
+        "type": "text",
+        "description": "Estado: programada, completada, cancelada"
+      },
+      {
+        "name": "notas",
+        "type": "rich_text",
+        "description": "Notas de la sesión"
+      },
+      {
+        "name": "tipo",
+        "type": "text",
+        "description": "Tipo: presencial, virtual"
+      }
+    ]
+  },
+  {
+    "name": "alertas",
+    "fields": [
+      {
+        "name": "id",
+        "type": "text",
+        "description": "ID único de la alerta"
+      },
+      {
+        "name": "id_estudiante",
+        "type": "text",
+        "description": "ID del estudiante"
+      },
+      {
+        "name": "id_caso",
+        "type": "text",
+        "description": "ID del caso asociado"
+      },
+      {
+        "name": "tipo",
+        "type": "text",
+        "description": "Tipo de alerta: riesgo_alto, ausentismo, cambio_conducta"
+      },
+      {
+        "name": "descripcion",
+        "type": "rich_text",
+        "description": "Descripción de la alerta"
+      },
+      {
+        "name": "nivel",
+        "type": "text",
+        "description": "Nivel: info, advertencia, critico"
+      },
+      {
+        "name": "leida",
+        "type": "bool",
+        "description": "Si la alerta ha sido leída"
+      },
+      {
+        "name": "fecha",
+        "type": "datetime",
+        "description": "Fecha de la alerta"
+      },
+      {
+        "name": "ia_generada",
+        "type": "bool",
+        "description": "Si fue generada por IA"
+      }
+    ]
+  },
+  {
+    "name": "observaciones",
+    "fields": [
+      {
+        "name": "id",
+        "type": "text",
+        "description": "ID único de la observación"
+      },
+      {
+        "name": "id_caso",
+        "type": "text",
+        "description": "ID del caso"
+      },
+      {
+        "name": "id_psicologo",
+        "type": "text",
+        "description": "ID del psicólogo"
+      },
+      {
+        "name": "contenido",
+        "type": "rich_text",
+        "description": "Contenido de la observación"
+      },
+      {
+        "name": "fecha",
+        "type": "datetime",
+        "description": "Fecha de la observación"
+      },
+      {
+        "name": "tipo",
+        "type": "text",
+        "description": "Tipo: sesión, seguimiento, incidente"
+      }
+    ]
+  },
+  {
+    "name": "reportes",
+    "fields": [
+      {
+        "name": "id",
+        "type": "text",
+        "description": "ID único del reporte"
+      },
+      {
+        "name": "id_estudiante",
+        "type": "text",
+        "description": "ID del estudiante (opcional)"
+      },
+      {
+        "name": "id_psicologo",
+        "type": "text",
+        "description": "ID del psicólogo que genera"
+      },
+      {
+        "name": "tipo",
+        "type": "text",
+        "description": "Tipo: individual, grupal, mensual, alerta"
+      },
+      {
+        "name": "titulo",
+        "type": "text",
+        "description": "Título del reporte"
+      },
+      {
+        "name": "contenido",
+        "type": "rich_text",
+        "description": "Contenido del reporte"
+      },
+      {
+        "name": "ia_resumen",
+        "type": "rich_text",
+        "description": "Resumen generado por IA"
+      },
+      {
+        "name": "fecha",
+        "type": "datetime",
+        "description": "Fecha de generación"
+      }
+    ]
+  }
+]
